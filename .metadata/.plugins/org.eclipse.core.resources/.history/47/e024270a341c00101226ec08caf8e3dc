@@ -1,0 +1,42 @@
+package com.example.demo.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.DTO.*;
+import com.example.demo.FeignClient.*;
+
+@Service
+public class StatisticService {
+
+    @Autowired private CustomerClient customerClient;
+    @Autowired private ContractClient contractClient;
+    @Autowired private PaymentClient paymentClient;
+
+    public List<CustomerRevenueDTO> getRevenueByCustomer() {
+        List<CustomerDTO> customers = customerClient.getAllCustomers();
+        List<CustomerRevenueDTO> result = new ArrayList<>();
+
+        for (CustomerDTO customer : customers) {
+            double total = 0.0;
+            List<ContractDTO> contracts = contractClient.getContractsByCustomer(customer.getId());
+
+            for (ContractDTO contract : contracts) {
+//                total += contract.getTienTraTruoc(); // tiền trả trước
+                List<PaymentDTO> payments = paymentClient.getPaymentsByContract(contract.getId());
+
+                for (PaymentDTO payment : payments) {
+                	 total += payment.getAmount();
+                }
+            }
+
+            result.add(new CustomerRevenueDTO(customer.getId(), customer.getName(), total));
+        }
+
+        return result;
+    }
+}
+

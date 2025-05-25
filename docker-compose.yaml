@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+#      MYSQL_DATABASE: customerdb
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    networks:
+      - backend
+
+  customer-service:
+    build:
+      context: ./CustomerService
+      dockerfile: Dockerfile
+    container_name: CustomerService
+    depends_on:
+      - mysql-db
+    ports:
+      - "8081:8081"
+    networks:
+      - backend
+  contract-service:
+    build:
+      context: ./ContractService
+      dockerfile: Dockerfile
+    container_name: ContractService
+    depends_on:
+      - mysql-db
+    ports:
+      - "8082:8082"
+    networks:
+      - backend
+  payment-service:
+    build:
+      context: ./PaymentService
+      dockerfile: Dockerfile
+    container_name: PaymentService
+    depends_on:
+      - mysql-db
+    ports:
+      - "8083:8083"
+    networks:
+      - backend
+  statistic-service:
+    build:
+      context: ./StatisticService
+      dockerfile: Dockerfile
+    container_name: StatisticService
+    depends_on:
+      - customer-service
+      - contract-service
+      - payment-service
+    ports:
+      - "8084:8084"
+    networks:
+      - backend
+volumes:
+  mysql-data:
+networks:
+  backend:

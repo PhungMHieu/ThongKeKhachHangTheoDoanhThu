@@ -1,0 +1,15 @@
+package com.example.demo.FeignClient;
+
+import java.util.List;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.demo.DTO.CustomerDTO;
+
+@FeignClient(name = "customer-service",url = "http://customer-service:8081") // tên đăng ký trong Eureka
+public interface CustomerClient {
+    @GetMapping("/customers")
+    List<CustomerDTO> getAllCustomers();
+}
+

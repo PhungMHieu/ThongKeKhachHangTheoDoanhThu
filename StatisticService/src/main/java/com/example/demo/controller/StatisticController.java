@@ -1,0 +1,24 @@
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.model.CustomerRevenue;
+import com.example.demo.service.StatisticService;
+
+@RestController
+@RequestMapping("/statistics")
+public class StatisticController {
+
+    @Autowired private StatisticService statisticService;
+
+    @GetMapping("/revenue-by-customer")
+    public List<CustomerRevenue> getRevenueByCustomer() {
+        return statisticService.getRevenueByCustomer();
+    }
+}
+
