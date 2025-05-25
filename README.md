@@ -15,10 +15,11 @@ Thống kê và phân loại khách hàng dựa theo tổng doanh thu, phục v�
 Hệ thống được tách thành các service riêng biệt:
 
 - **Customer Service**: Quản lý thông tin khách hàng.
-- **Order Service**: Ghi nhận đơn hàng và doanh thu.
+- **Contract Service**: Quản lý thông tin hợp đồng
+- **Payment Service**: Ghi nhận đơn hàng và doanh thu.
 - **Statistic Service (dịch vụ này)**: Tổng hợp và phân tích dữ liệu để thống kê khách hàng theo doanh thu.
 
-Các dịch vụ giao tiếp thông qua **REST API** hoặc **Message Queue (tùy cấu hình)**.
+Các dịch vụ giao tiếp thông qua **Feign Clients**.
 
 ---
 
@@ -28,7 +29,7 @@ Các dịch vụ giao tiếp thông qua **REST API** hoặc **Message Queue (tù
 |----------------|-----------------------------------|
 | Backend        | Spring Boot                       |
 | Giao tiếp      | REST API, Feign Client            |
-| Service Discovery | Eureka (hoặc Consul)           |
+| Service Discovery | Eureka           |
 | Config         | Spring Cloud Config               |
 | CI/CD          | Jenkins / GitHub Actions          |
 | Container hóa  | Docker                            |
@@ -39,8 +40,8 @@ Các dịch vụ giao tiếp thông qua **REST API** hoặc **Message Queue (tù
 
 ## 📈 Luồng Thống Kê Doanh Thu
 
-1. **Order Service** lưu đơn hàng và doanh thu theo từng khách hàng.
-2. **Statistic Service** gọi API hoặc nhận dữ liệu từ Order Service.
+1. **Payment Service** lưu đơn hàng và doanh thu theo từng khách hàng.
+2. **Statistic Service** gọi API hoặc nhận dữ liệu từ Payment Service.
 3. Tính toán tổng doanh thu từng khách hàng.
 4. Trả về danh sách khách hàng được sắp xếp theo doanh thu giảm dần.
 
